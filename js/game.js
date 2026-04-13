@@ -6,8 +6,8 @@ const QUALITY_MAX = 100;
 
 /** @param {number} w */
 function qualityBand(w) {
-  if (w < 25) return { label: "Critical", hint: "Trust and accuracy are taking a hit — slow the loop down next round." };
-  if (w < 45) return { label: "Shaky", hint: "One sloppy lap can mean a lot of cleanup — tighten prompts or verify more." };
+  if (w < 25) return { label: "Critical", hint: "Trust and accuracy are taking a hit - slow the loop down next round." };
+  if (w < 45) return { label: "Shaky", hint: "One sloppy lap can mean a lot of cleanup - tighten prompts or verify more." };
   if (w < 65) return { label: "Stable", hint: "You are treading water: fine for now, room to improve." };
   if (w < 85) return { label: "Strong", hint: "Small good habits are stacking; keep going." };
   return { label: "Thriving", hint: "The loop is buying you time and fewer surprises." };
@@ -45,7 +45,7 @@ function renderQuality(quality) {
   fillEl.className = "quality__fill";
   fillEl.classList.add(`quality__fill--${tier}`);
 
-  hintEl.textContent = `${band.label} — ${band.hint}`;
+  hintEl.textContent = `${band.label} - ${band.hint}`;
   barEl.setAttribute("aria-valuenow", String(clamped));
 }
 
@@ -69,11 +69,11 @@ function showChoiceQualityNote(choice) {
     el.classList.remove("quality__delta--up", "quality__delta--down");
     el.classList.add("quality__delta--neutral");
   } else if (d > 0) {
-    line = `+${d} — ${choice.deltaWhy}`;
+    line = `+${d} - ${choice.deltaWhy}`;
     el.classList.remove("quality__delta--down", "quality__delta--neutral");
     el.classList.add("quality__delta--up");
   } else {
-    line = `${d} — ${choice.deltaWhy}`;
+    line = `${d} - ${choice.deltaWhy}`;
     el.classList.remove("quality__delta--up", "quality__delta--neutral");
     el.classList.add("quality__delta--down");
   }

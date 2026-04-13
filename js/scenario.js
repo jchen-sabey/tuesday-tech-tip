@@ -1,6 +1,6 @@
 /**
  * Universal scenario: drafting an important message with help. The details are
- * left open (work, school, housing, family, health admin — anything where words
+ * left open (work, school, housing, family, health admin - anything where words
  * carry weight). Same loop lessons: brief vs vague prompts, verification, iteration.
  */
 
@@ -18,13 +18,13 @@ export const beats = {
     id: "start",
     title: "The blank screen",
     body: [
-      "Someone is waiting on a message from you: clear, accurate, and on point. Email, portal, letter — whatever the channel, **mistakes mean extra rounds, lost time, and harder trust to earn back**.",
+      "Someone is waiting on a message from you: clear, accurate, and on point. Email, portal, letter - whatever the channel, **mistakes mean extra rounds, lost time, and harder trust to earn back**.",
       "You reach for an assistant to draft. First beat of the **orchestrator loop**: what you ask for, what comes back, and what you do before anything goes out the door.",
     ],
     choices: [
       {
         label:
-          "Paste a wall of context — old threads, half-remembered facts — and say “make it sound good.”",
+          'Paste a wall of context - old threads, half-remembered facts - and say "make it sound good."',
         qualityDelta: -12,
         next: "vague_prompt",
         deltaWhy: "A vague prompt gives the model room to invent or blur facts you never nailed down.",
@@ -38,10 +38,10 @@ export const beats = {
       },
       {
         label:
-          "Skip the body for now; ask for “10 opening lines” just to get something on the screen.",
+          'Skip the body for now; ask for "10 opening lines" just to get something on the screen.',
         qualityDelta: 3,
         next: "subject_first",
-        deltaWhy: "A small, scoped run is okay — as long as you plan to anchor the real message next.",
+        deltaWhy: "A small, scoped run is okay - as long as you plan to anchor the real message next.",
       },
     ],
   },
@@ -51,7 +51,7 @@ export const beats = {
     title: "A confident first draft",
     body: [
       "The draft reads smooth and sure. Then you spot the problems: a date that is off, a name spelled wrong, and a sentence that quietly **commits you to something you did not intend**.",
-      "Lesson in one line: a mushy **prompt** often produces a confident **result** — which is exactly when mistakes hide in plain sight.",
+      "Lesson in one line: a mushy **prompt** often produces a confident **result** - which is exactly when mistakes hide in plain sight.",
     ],
     choices: [
       {
@@ -64,13 +64,13 @@ export const beats = {
         label: "Stop. Re-prompt: list the non-negotiable facts and forbid anything not grounded in what you provided.",
         qualityDelta: 8,
         next: "verify_pass",
-        deltaWhy: "You used Decide to tighten the prompt around facts you control — risk drops fast.",
+        deltaWhy: "You used Decide to tighten the prompt around facts you control - risk drops fast.",
       },
       {
         label: "Throw the draft away and write the whole message alone, without using the loop again.",
         qualityDelta: -5,
         next: "end_burnout",
-        deltaWhy: "The message may be fine, but you skip practice at steering the loop — next time is harder.",
+        deltaWhy: "The message may be fine, but you skip practice at steering the loop - next time is harder.",
       },
     ],
   },
@@ -80,14 +80,14 @@ export const beats = {
     title: "A plain, faithful draft",
     body: [
       "The text follows your structure. A few sentences feel stiff, but the facts you named are still there, unchanged.",
-      "Nice work: tight constraints in the **prompt** meant fewer surprises in the **result** — less to verify, less to fix.",
+      "Nice work: tight constraints in the **prompt** meant fewer surprises in the **result** - less to verify, less to fix.",
     ],
     choices: [
       {
-        label: "Ask for one revision: warmer tone and shorter sentences — same facts, same length.",
+        label: "Ask for one revision: warmer tone and shorter sentences - same facts, same length.",
         qualityDelta: 20,
         next: "iterate_well",
-        deltaWhy: "A narrow revision pass improves tone without touching truth — textbook small iteration.",
+        deltaWhy: "A narrow revision pass improves tone without touching truth - textbook small iteration.",
       },
       {
         label: "Copy it out and send immediately, no last read.",
@@ -102,7 +102,7 @@ export const beats = {
     id: "subject_first",
     title: "Strong openings, shaky spine",
     body: [
-      "You get memorable first lines — but there is still no full message. Along the way, the assistant invented “helpful” details that were never true.",
+      'You get memorable first lines - but there is still no full message. Along the way, the assistant invented "helpful" details that were never true.',
       "Even a quick **run** needs a target: every step should tie back to what you actually need to say.",
     ],
     choices: [
@@ -111,7 +111,7 @@ export const beats = {
           "Pick a direction, then run a second prompt that only allows the points you already approved.",
         qualityDelta: 7,
         next: "clear_brief",
-        deltaWhy: "You locked the spine before expanding — the next prompt has real guardrails.",
+        deltaWhy: "You locked the spine before expanding - the next prompt has real guardrails.",
       },
       {
         label: "Choose an opening and ask for the full message in one go, without locking your main points.",
@@ -126,8 +126,8 @@ export const beats = {
     id: "verify_pass",
     title: "Verification round",
     body: [
-      "You add: “Flag anything uncertain; do not add facts I did not give.” The assistant labels one line as guessed — you cut it and swap in a line you would sign your name to.",
-      "**Quality** climbs when you use the **Decide** step to verify the output against reality — not to stop because it merely sounds good.",
+      'You add: "Flag anything uncertain; do not add facts I did not give." The assistant labels one line as guessed - you cut it and swap in a line you would sign your name to.',
+      "**Quality** climbs when you use the **Decide** step to verify the output against reality - not to stop because it merely sounds good.",
     ],
     choices: [
       {
@@ -145,14 +145,14 @@ export const beats = {
     title: "Tight iteration",
     body: [
       "The second version reads better. The facts are untouched. You spend a few minutes instead of an hour rewriting from zero.",
-      "That is the loop doing its job: **prompt → run → result → decide** (repeat), in small, low-risk hops.",
+      "That is the loop doing its job: **prompt -> run -> result -> decide** (repeat), in small, low-risk hops.",
     ],
     choices: [
       {
         label: "Save your brief as a template for the next time words really matter.",
         qualityDelta: 20,
         next: "end_sustainable",
-        deltaWhy: "Turning today’s brief into a template makes the next loop faster and safer.",
+        deltaWhy: "Turning today's brief into a template makes the next loop faster and safer.",
       },
     ],
   },
@@ -161,7 +161,7 @@ export const beats = {
     id: "end_regret",
     title: "Ending: the cleanup",
     body: [
-      "Your calendar fills with clarifications, corrections, and re-sent details — work you would not have needed if the first message had been tight. Each back-and-forth chips away at how credible the next thing you send sounds.",
+      "Your calendar fills with clarifications, corrections, and re-sent details - work you would not have needed if the first message had been tight. Each back-and-forth chips away at how credible the next thing you send sounds.",
       "Worth another run: small changes earlier in the loop usually cost less than repair work later.",
     ],
     choices: [
@@ -169,7 +169,7 @@ export const beats = {
         label: "Play again",
         qualityDelta: 0,
         next: "start",
-        deltaWhy: "Quality reset to 50 — try another path through the story.",
+        deltaWhy: "Quality reset to 50 - try another path through the story.",
       },
     ],
   },
@@ -178,14 +178,14 @@ export const beats = {
     id: "end_burnout",
     title: "Ending: you carried it all",
     body: [
-      "The message went out, but this time you did not get much lift from the loop — same outcome, more solo effort. Next time, a lighter touch on prompting might save you hours.",
+      "The message went out, but this time you did not get much lift from the loop - same outcome, more solo effort. Next time, a lighter touch on prompting might save you hours.",
     ],
     choices: [
       {
         label: "Play again",
         qualityDelta: 0,
         next: "start",
-        deltaWhy: "Quality reset to 50 — try another path through the story.",
+        deltaWhy: "Quality reset to 50 - try another path through the story.",
       },
     ],
   },
@@ -194,14 +194,14 @@ export const beats = {
     id: "end_rushed",
     title: "Ending: probably fine",
     body: [
-      "No urgent fires — today. You still skipped a proper **decide** pass, so you shipped text you did not fully re-read. That is free risk on the table for next time.",
+      "No urgent fires - today. You still skipped a proper **decide** pass, so you shipped text you did not fully re-read. That is free risk on the table for next time.",
     ],
     choices: [
       {
         label: "Play again",
         qualityDelta: 0,
         next: "start",
-        deltaWhy: "Quality reset to 50 — try another path through the story.",
+        deltaWhy: "Quality reset to 50 - try another path through the story.",
       },
     ],
   },
@@ -217,7 +217,7 @@ export const beats = {
         label: "Play again",
         qualityDelta: 0,
         next: "start",
-        deltaWhy: "Quality reset to 50 — try another path through the story.",
+        deltaWhy: "Quality reset to 50 - try another path through the story.",
       },
     ],
   },
@@ -226,14 +226,14 @@ export const beats = {
     id: "end_sustainable",
     title: "Ending: a habit, not a one-off",
     body: [
-      "You have a reusable brief, a quick checklist before you hit send, and a habit of small iterations. That is orchestration — and you can drop the same pattern into the next message that actually matters.",
+      "You have a reusable brief, a quick checklist before you hit send, and a habit of small iterations. That is orchestration - and you can drop the same pattern into the next message that actually matters.",
     ],
     choices: [
       {
         label: "Play again",
         qualityDelta: 0,
         next: "start",
-        deltaWhy: "Quality reset to 50 — try another path through the story.",
+        deltaWhy: "Quality reset to 50 - try another path through the story.",
       },
     ],
   },

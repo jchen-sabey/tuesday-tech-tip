@@ -15,7 +15,7 @@
   --gray-700: #494949;
   --gray-900: #1b1b1b;
 
-  /* Semantic (UI) — light base, softened blues for readability */
+  /* Semantic (UI) - light base, softened blues for readability */
   --bg: color-mix(
     in srgb,
     color-mix(in srgb, var(--gray-100) 94%, var(--marine) 6%) 96%,
@@ -284,7 +284,7 @@ body {
   transition: width 0.35s ease, background 0.35s ease;
 }
 
-/* Tiers: red under 45, orange 45–64, green 65+ (matches hint bands) */
+/* Tiers: red under 45, orange 45-64, green 65+ (matches hint bands) */
 .quality__fill--low {
   background: linear-gradient(90deg, #991b1b, #ef4444);
 }
