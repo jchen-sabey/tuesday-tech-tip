@@ -1,0 +1,891 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Prompt Orchestrator — Quality Loop</title>
+    <style>
+:root {
+  /* Sabey core */
+  --midnight: #08242f;
+  --marine: #142968;
+  --azure: #0082ff;
+  --black: #000000;
+  --white: #ffffff;
+
+  /* Neutral support */
+  --gray-100: #f5f5f5;
+  --gray-200: #dfdfdf;
+  --gray-300: #c3c3c3;
+  --gray-500: #9b9b9b;
+  --gray-600: #767676;
+  --gray-700: #494949;
+  --gray-900: #1b1b1b;
+
+  /* Semantic (UI) — light base, softened blues for readability */
+  --bg: color-mix(
+    in srgb,
+    color-mix(in srgb, var(--gray-100) 94%, var(--marine) 6%) 96%,
+    var(--azure) 4%
+  );
+  --surface: var(--white);
+  --border: var(--gray-200);
+  --text: var(--gray-900);
+  --text-secondary: var(--gray-700);
+  --muted: var(--gray-600);
+  /* Azure + Marine + white: less electric than pure #0082FF */
+  --accent: color-mix(
+    in srgb,
+    color-mix(in srgb, var(--azure) 72%, var(--marine) 28%) 68%,
+    var(--white) 32%
+  );
+  --accent-deep: color-mix(
+    in srgb,
+    color-mix(in srgb, var(--marine) 52%, var(--azure) 48%) 62%,
+    var(--white) 38%
+  );
+  --control-bg: color-mix(
+    in srgb,
+    color-mix(in srgb, var(--gray-100) 91%, var(--marine) 9%) 88%,
+    var(--white) 12%
+  );
+  --control-bg-hover: color-mix(
+    in srgb,
+    color-mix(in srgb, var(--gray-200) 88%, var(--marine) 12%) 84%,
+    var(--white) 16%
+  );
+  --font-sans: "DM Sans", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+  --radius: 12px;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: var(--font-sans);
+  background:
+    radial-gradient(
+      ellipse 95% 70% at 50% -15%,
+      color-mix(
+          in srgb,
+          color-mix(in srgb, var(--white) 91%, var(--azure) 9%) 93%,
+          var(--marine) 7%
+        )
+        0%,
+      transparent 58%
+    ),
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--gray-100) 94%, var(--marine) 3%) 0%,
+      var(--bg) 38%,
+      color-mix(in srgb, var(--bg) 96%, var(--gray-200) 4%) 100%
+    );
+  color: var(--text);
+  line-height: 1.55;
+}
+
+.app {
+  max-width: 42rem;
+  margin: 0 auto;
+  padding: 1.75rem 1.25rem 3rem;
+}
+
+.header {
+  margin-bottom: 1.25rem;
+}
+
+.header h1 {
+  font-size: 1.65rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin: 0;
+  color: color-mix(in srgb, var(--midnight) 78%, var(--marine) 22%);
+}
+
+.intro__card {
+  padding: 1.35rem 1.25rem 1.5rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: 0 1px 3px color-mix(in srgb, var(--midnight) 7%, transparent);
+}
+
+.intro__title {
+  margin: 0 0 1rem;
+  font-size: 1.2rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: color-mix(in srgb, var(--midnight) 78%, var(--marine) 22%);
+}
+
+.intro__body {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+}
+
+.intro__body p {
+  margin: 0 0 0.85rem;
+}
+
+.intro__body p:last-of-type {
+  margin-bottom: 0;
+}
+
+.intro__steps {
+  margin: 0 0 1rem;
+  padding-left: 1.2rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+.intro__steps li {
+  margin-bottom: 0.5rem;
+}
+
+.intro__steps li:last-child {
+  margin-bottom: 0;
+}
+
+.intro__cta {
+  display: block;
+  width: 100%;
+  margin-top: 1.35rem;
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  font-weight: 600;
+  padding: 0.8rem 1rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  color: var(--white);
+  background: linear-gradient(180deg, var(--accent), var(--accent-deep));
+  box-shadow: 0 1px 2px color-mix(in srgb, var(--midnight) 12%, transparent);
+  transition: filter 0.15s, transform 0.1s;
+}
+
+.intro__cta:hover {
+  filter: brightness(1.05);
+}
+
+.intro__cta:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+.intro__cta:active {
+  transform: scale(0.99);
+}
+
+.game-root .tagline {
+  margin: 0 0 1.25rem;
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+.game-root .tagline strong {
+  color: color-mix(
+    in srgb,
+    color-mix(in srgb, var(--azure) 62%, var(--marine) 38%) 82%,
+    var(--gray-900) 18%
+  );
+  font-weight: 600;
+}
+
+.loop-panel {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem 0.5rem;
+  margin: 1.5rem 0;
+  padding: 0.85rem 1rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: 0 1px 3px color-mix(in srgb, var(--midnight) 7%, transparent);
+}
+
+.loop-step {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 0.35rem 0.6rem;
+  border-radius: 6px;
+  background: var(--control-bg);
+  color: var(--muted);
+  border: 1px solid transparent;
+  transition: color 0.2s, border-color 0.2s, background 0.2s;
+}
+
+.loop-step.is-active {
+  color: color-mix(in srgb, var(--marine) 55%, var(--azure) 45%);
+  border-color: color-mix(in srgb, var(--azure) 28%, var(--border));
+  background: color-mix(in srgb, var(--azure) 9%, var(--white));
+}
+
+.loop-arrow {
+  color: var(--gray-500);
+  font-size: 0.85rem;
+  user-select: none;
+}
+
+.quality {
+  margin-bottom: 1.5rem;
+  padding: 1rem 1.1rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: 0 1px 3px color-mix(in srgb, var(--midnight) 7%, transparent);
+}
+
+.quality__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 0.5rem;
+}
+
+.quality__title {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+}
+
+.quality__value {
+  font-family: var(--font-mono);
+  font-size: 1.35rem;
+  font-weight: 600;
+  transition: color 0.35s ease;
+}
+
+.quality__value--low {
+  color: #b91c1c;
+}
+
+.quality__value--mid {
+  color: #c2410c;
+}
+
+.quality__value--high {
+  color: #15803d;
+}
+
+.quality__bar {
+  height: 8px;
+  background: var(--control-bg);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.quality__fill {
+  height: 100%;
+  width: 50%;
+  border-radius: 999px;
+  transition: width 0.35s ease, background 0.35s ease;
+}
+
+/* Tiers: red under 45, orange 45–64, green 65+ (matches hint bands) */
+.quality__fill--low {
+  background: linear-gradient(90deg, #991b1b, #ef4444);
+}
+
+.quality__fill--mid {
+  background: linear-gradient(90deg, #9a3412, #fb923c);
+}
+
+.quality__fill--high {
+  background: linear-gradient(90deg, #166534, #4ade80);
+}
+
+.quality__delta {
+  margin: 0.55rem 0 0;
+  padding: 0.5rem 0.65rem;
+  font-size: 0.84rem;
+  line-height: 1.45;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--gray-100);
+  color: var(--gray-700);
+}
+
+.quality__delta--up {
+  background: color-mix(in srgb, #dcfce7 85%, var(--white));
+  border-color: color-mix(in srgb, #166534 25%, var(--border));
+  color: #14532d;
+}
+
+.quality__delta--down {
+  background: color-mix(in srgb, #fee2e2 88%, var(--white));
+  border-color: color-mix(in srgb, #991b1b 22%, var(--border));
+  color: #7f1d1d;
+}
+
+.quality__delta--neutral {
+  background: color-mix(in srgb, var(--gray-100) 92%, var(--marine) 8%);
+  color: var(--gray-700);
+}
+
+.quality__hint {
+  margin: 0.65rem 0 0;
+  font-size: 0.88rem;
+  color: var(--muted);
+}
+
+.scene {
+  padding: 1.25rem 1.15rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  min-height: 12rem;
+  box-shadow: 0 1px 3px color-mix(in srgb, var(--midnight) 7%, transparent);
+}
+
+.scene__meta {
+  margin: 0 0 0.35rem;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--muted);
+}
+
+.scene__title {
+  margin: 0 0 0.75rem;
+  font-size: 1.2rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.scene__body {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  margin-bottom: 1.25rem;
+}
+
+.scene__body p {
+  margin: 0 0 0.75rem;
+}
+
+.scene__body p:last-child {
+  margin-bottom: 0;
+}
+
+.choices {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+
+.choice-btn {
+  font-family: var(--font-sans);
+  font-size: 0.92rem;
+  text-align: left;
+  padding: 0.75rem 0.9rem;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--control-bg);
+  color: var(--text);
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.choice-btn:hover {
+  border-color: color-mix(in srgb, var(--azure) 22%, var(--gray-300));
+  background: var(--control-bg-hover);
+}
+
+.choice-btn:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.choice-btn:active {
+  transform: scale(0.99);
+}
+
+</style>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,600;0,9..40,700;1,9..40,400&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div class="app">
+      <header class="header">
+        <h1>Prompt Orchestrator</h1>
+      </header>
+
+      <section id="intro-screen" class="intro" aria-labelledby="intro-heading">
+        <div class="intro__card">
+          <h2 id="intro-heading" class="intro__title">The orchestrator loop</h2>
+          <div class="intro__body">
+            <p>
+              Using an assistant is not one-and-done. You are driving: ask, wait, read what you got, then
+              choose what happens next. That round trip is the <strong>orchestrator loop</strong>.
+            </p>
+            <ol class="intro__steps">
+              <li><strong>Prompt</strong> — You say what you want (and what you will not accept).</li>
+              <li><strong>Run</strong> — The tool does its thing in the background.</li>
+              <li><strong>Result</strong> — Something lands in front of you. Skim at your peril.</li>
+              <li><strong>Decide</strong> — Ship it, fix it, or try again — and you are back at step one.</li>
+            </ol>
+            <p>
+              In the story below, <strong>quality</strong> is your scoreboard: clear briefs, checks, and
+              patient iteration push it up; vague asks and skipped reads drag it down. No report card — just
+              a live read on where your habits land.
+            </p>
+          </div>
+          <button type="button" class="intro__cta" id="intro-start">Let's play</button>
+        </div>
+      </section>
+
+      <div id="game-root" class="game-root" hidden>
+        <p class="tagline">
+          Same loop as before: <strong>prompt → run → result → decide</strong>. Each pick nudges quality.
+        </p>
+
+        <section class="loop-panel" aria-label="Orchestrator loop">
+          <div class="loop-step is-active" data-step="prompt">
+            <span class="loop-step__label">Prompt</span>
+          </div>
+          <span class="loop-arrow" aria-hidden="true">→</span>
+          <div class="loop-step" data-step="run">
+            <span class="loop-step__label">Run</span>
+          </div>
+          <span class="loop-arrow" aria-hidden="true">→</span>
+          <div class="loop-step" data-step="result">
+            <span class="loop-step__label">Result</span>
+          </div>
+          <span class="loop-arrow" aria-hidden="true">→</span>
+          <div class="loop-step" data-step="decide">
+            <span class="loop-step__label">Decide</span>
+          </div>
+        </section>
+
+        <section class="quality" aria-live="polite">
+          <div class="quality__header">
+            <span class="quality__title">Quality</span>
+            <span class="quality__value quality__value--mid" id="quality-value">50</span>
+          </div>
+          <div
+            class="quality__bar"
+            role="progressbar"
+            aria-valuemin="0"
+            aria-valuemax="100"
+            aria-valuenow="50"
+            id="quality-bar-wrap"
+          >
+            <div class="quality__fill quality__fill--mid" id="quality-fill"></div>
+          </div>
+          <p class="quality__delta" id="quality-delta" hidden aria-live="polite"></p>
+          <p class="quality__hint" id="quality-hint">
+            Stable — You are treading water: fine for now, room to improve.
+          </p>
+        </section>
+
+        <main class="scene" id="scene">
+          <p class="scene__meta" id="scene-meta"></p>
+          <h2 class="scene__title" id="scene-title"></h2>
+          <div class="scene__body" id="scene-body"></div>
+          <div class="choices" id="choices"></div>
+        </main>
+      </div>
+    </div>
+
+    <script>
+/**
+ * Universal scenario: drafting an important message with help. The details are
+ * left open (work, school, housing, family, health admin — anything where words
+ * carry weight). Same loop lessons: brief vs vague prompts, verification, iteration.
+ */
+
+/** @typedef {{ label: string; qualityDelta: number; next: string; deltaWhy: string }} Choice */
+/** @typedef {{ id: string; title: string; body: string[]; choices: Choice[] }} Beat */
+
+/** @type {Record<string, Beat>} */
+const beats = {
+  start: {
+    id: "start",
+    title: "The blank screen",
+    body: [
+      "Someone is waiting on a message from you: clear, accurate, and on point. Email, portal, letter — whatever the channel, **mistakes mean extra rounds, lost time, and harder trust to earn back**.",
+      "You reach for an assistant to draft. First beat of the **orchestrator loop**: what you ask for, what comes back, and what you do before anything goes out the door.",
+    ],
+    choices: [
+      {
+        label:
+          "Paste a wall of context — old threads, half-remembered facts — and say “make it sound good.”",
+        qualityDelta: -12,
+        next: "vague_prompt",
+        deltaWhy: "A vague prompt gives the model room to invent or blur facts you never nailed down.",
+      },
+      {
+        label:
+          "Write a tight brief: who it is for, what you need them to know or do, tone, length, and facts that must stay exact.",
+        qualityDelta: 10,
+        next: "clear_brief",
+        deltaWhy: "A tight brief narrows what can go wrong before the first word is generated.",
+      },
+      {
+        label:
+          "Skip the body for now; ask for “10 opening lines” just to get something on the screen.",
+        qualityDelta: 3,
+        next: "subject_first",
+        deltaWhy: "A small, scoped run is okay — as long as you plan to anchor the real message next.",
+      },
+    ],
+  },
+
+  vague_prompt: {
+    id: "vague_prompt",
+    title: "A confident first draft",
+    body: [
+      "The draft reads smooth and sure. Then you spot the problems: a date that is off, a name spelled wrong, and a sentence that quietly **commits you to something you did not intend**.",
+      "Lesson in one line: a mushy **prompt** often produces a confident **result** — which is exactly when mistakes hide in plain sight.",
+    ],
+    choices: [
+      {
+        label: "Send it; you will clean up any mix-ups if they show up later.",
+        qualityDelta: -18,
+        next: "end_regret",
+        deltaWhy: "Sending unverified text usually costs more time in corrections and chips away at credibility.",
+      },
+      {
+        label: "Stop. Re-prompt: list the non-negotiable facts and forbid anything not grounded in what you provided.",
+        qualityDelta: 8,
+        next: "verify_pass",
+        deltaWhy: "You used Decide to tighten the prompt around facts you control — risk drops fast.",
+      },
+      {
+        label: "Throw the draft away and write the whole message alone, without using the loop again.",
+        qualityDelta: -5,
+        next: "end_burnout",
+        deltaWhy: "The message may be fine, but you skip practice at steering the loop — next time is harder.",
+      },
+    ],
+  },
+
+  clear_brief: {
+    id: "clear_brief",
+    title: "A plain, faithful draft",
+    body: [
+      "The text follows your structure. A few sentences feel stiff, but the facts you named are still there, unchanged.",
+      "Nice work: tight constraints in the **prompt** meant fewer surprises in the **result** — less to verify, less to fix.",
+    ],
+    choices: [
+      {
+        label: "Ask for one revision: warmer tone and shorter sentences — same facts, same length.",
+        qualityDelta: 20,
+        next: "iterate_well",
+        deltaWhy: "A narrow revision pass improves tone without touching truth — textbook small iteration.",
+      },
+      {
+        label: "Copy it out and send immediately, no last read.",
+        qualityDelta: -4,
+        next: "end_rushed",
+        deltaWhy: "Skipping a final read leaves silent errors and sloppy wording on the record.",
+      },
+    ],
+  },
+
+  subject_first: {
+    id: "subject_first",
+    title: "Strong openings, shaky spine",
+    body: [
+      "You get memorable first lines — but there is still no full message. Along the way, the assistant invented “helpful” details that were never true.",
+      "Even a quick **run** needs a target: every step should tie back to what you actually need to say.",
+    ],
+    choices: [
+      {
+        label:
+          "Pick a direction, then run a second prompt that only allows the points you already approved.",
+        qualityDelta: 7,
+        next: "clear_brief",
+        deltaWhy: "You locked the spine before expanding — the next prompt has real guardrails.",
+      },
+      {
+        label: "Choose an opening and ask for the full message in one go, without locking your main points.",
+        qualityDelta: -6,
+        next: "vague_prompt",
+        deltaWhy: "One big ask without fixed points drifts back toward mushy prompts and shaky output.",
+      },
+    ],
+  },
+
+  verify_pass: {
+    id: "verify_pass",
+    title: "Verification round",
+    body: [
+      "You add: “Flag anything uncertain; do not add facts I did not give.” The assistant labels one line as guessed — you cut it and swap in a line you would sign your name to.",
+      "**Quality** climbs when you use the **Decide** step to verify the output against reality — not to stop because it merely sounds good.",
+    ],
+    choices: [
+      {
+        label:
+          "Send the message and, where it makes sense, note that you used drafting help and checked the facts yourself.",
+        qualityDelta: 12,
+        next: "end_transparent",
+        deltaWhy: "Clear attribution plus checked facts saves everyone time and protects trust.",
+      },
+    ],
+  },
+
+  iterate_well: {
+    id: "iterate_well",
+    title: "Tight iteration",
+    body: [
+      "The second version reads better. The facts are untouched. You spend a few minutes instead of an hour rewriting from zero.",
+      "That is the loop doing its job: **prompt → run → result → decide** (repeat), in small, low-risk hops.",
+    ],
+    choices: [
+      {
+        label: "Save your brief as a template for the next time words really matter.",
+        qualityDelta: 20,
+        next: "end_sustainable",
+        deltaWhy: "Turning today’s brief into a template makes the next loop faster and safer.",
+      },
+    ],
+  },
+
+  end_regret: {
+    id: "end_regret",
+    title: "Ending: the cleanup",
+    body: [
+      "Your calendar fills with clarifications, corrections, and re-sent details — work you would not have needed if the first message had been tight. Each back-and-forth chips away at how credible the next thing you send sounds.",
+      "Worth another run: small changes earlier in the loop usually cost less than repair work later.",
+    ],
+    choices: [
+      {
+        label: "Play again",
+        qualityDelta: 0,
+        next: "start",
+        deltaWhy: "Quality reset to 50 — try another path through the story.",
+      },
+    ],
+  },
+
+  end_burnout: {
+    id: "end_burnout",
+    title: "Ending: you carried it all",
+    body: [
+      "The message went out, but this time you did not get much lift from the loop — same outcome, more solo effort. Next time, a lighter touch on prompting might save you hours.",
+    ],
+    choices: [
+      {
+        label: "Play again",
+        qualityDelta: 0,
+        next: "start",
+        deltaWhy: "Quality reset to 50 — try another path through the story.",
+      },
+    ],
+  },
+
+  end_rushed: {
+    id: "end_rushed",
+    title: "Ending: probably fine",
+    body: [
+      "No urgent fires — today. You still skipped a proper **decide** pass, so you shipped text you did not fully re-read. That is free risk on the table for next time.",
+    ],
+    choices: [
+      {
+        label: "Play again",
+        qualityDelta: 0,
+        next: "start",
+        deltaWhy: "Quality reset to 50 — try another path through the story.",
+      },
+    ],
+  },
+
+  end_transparent: {
+    id: "end_transparent",
+    title: "Ending: trust intact",
+    body: [
+      "They know which parts you stand behind and how you checked them. That clarity saves time on both sides and makes the next exchange easier to trust.",
+    ],
+    choices: [
+      {
+        label: "Play again",
+        qualityDelta: 0,
+        next: "start",
+        deltaWhy: "Quality reset to 50 — try another path through the story.",
+      },
+    ],
+  },
+
+  end_sustainable: {
+    id: "end_sustainable",
+    title: "Ending: a habit, not a one-off",
+    body: [
+      "You have a reusable brief, a quick checklist before you hit send, and a habit of small iterations. That is orchestration — and you can drop the same pattern into the next message that actually matters.",
+    ],
+    choices: [
+      {
+        label: "Play again",
+        qualityDelta: 0,
+        next: "start",
+        deltaWhy: "Quality reset to 50 — try another path through the story.",
+      },
+    ],
+  },
+};
+
+const INITIAL_QUALITY = 50;
+const QUALITY_MIN = 0;
+const QUALITY_MAX = 100;
+
+/** @param {number} w */
+function qualityBand(w) {
+  if (w < 25) return { label: "Critical", hint: "Trust and accuracy are taking a hit — slow the loop down next round." };
+  if (w < 45) return { label: "Shaky", hint: "One sloppy lap can mean a lot of cleanup — tighten prompts or verify more." };
+  if (w < 65) return { label: "Stable", hint: "You are treading water: fine for now, room to improve." };
+  if (w < 85) return { label: "Strong", hint: "Small good habits are stacking; keep going." };
+  return { label: "Thriving", hint: "The loop is buying you time and fewer surprises." };
+}
+
+function setLoopPhase(phaseIndex) {
+  document.querySelectorAll(".loop-step").forEach((el, i) => {
+    el.classList.toggle("is-active", i === phaseIndex);
+  });
+}
+
+/** @param {number} q */
+function qualityTier(q) {
+  if (q < 45) return "low";
+  if (q < 65) return "mid";
+  return "high";
+}
+
+/** @param {number} quality */
+function renderQuality(quality) {
+  const clamped = Math.max(QUALITY_MIN, Math.min(QUALITY_MAX, quality));
+  const band = qualityBand(clamped);
+  const tier = qualityTier(clamped);
+
+  const valueEl = document.getElementById("quality-value");
+  const fillEl = document.getElementById("quality-fill");
+  const hintEl = document.getElementById("quality-hint");
+  const barEl = document.getElementById("quality-bar-wrap");
+
+  valueEl.textContent = String(clamped);
+  valueEl.className = "quality__value";
+  valueEl.classList.add(`quality__value--${tier}`);
+
+  fillEl.style.width = `${clamped}%`;
+  fillEl.className = "quality__fill";
+  fillEl.classList.add(`quality__fill--${tier}`);
+
+  hintEl.textContent = `${band.label} — ${band.hint}`;
+  barEl.setAttribute("aria-valuenow", String(clamped));
+}
+
+/** @param {{ qualityDelta: number; next: string; deltaWhy: string }} choice */
+function showChoiceQualityNote(choice) {
+  const el = document.getElementById("quality-delta");
+  if (!el) return;
+
+  if (choice.next === "start") {
+    el.textContent = choice.deltaWhy;
+    el.hidden = false;
+    el.classList.remove("quality__delta--up", "quality__delta--down", "quality__delta--neutral");
+    el.classList.add("quality__delta--neutral");
+    return;
+  }
+
+  const d = choice.qualityDelta;
+  let line;
+  if (d === 0) {
+    line = choice.deltaWhy;
+    el.classList.remove("quality__delta--up", "quality__delta--down");
+    el.classList.add("quality__delta--neutral");
+  } else if (d > 0) {
+    line = `+${d} — ${choice.deltaWhy}`;
+    el.classList.remove("quality__delta--down", "quality__delta--neutral");
+    el.classList.add("quality__delta--up");
+  } else {
+    line = `${d} — ${choice.deltaWhy}`;
+    el.classList.remove("quality__delta--up", "quality__delta--neutral");
+    el.classList.add("quality__delta--down");
+  }
+
+  el.textContent = line;
+  el.hidden = false;
+}
+
+function clearChoiceQualityNote() {
+  const el = document.getElementById("quality-delta");
+  if (!el) return;
+  el.hidden = true;
+  el.textContent = "";
+  el.classList.remove("quality__delta--up", "quality__delta--down", "quality__delta--neutral");
+}
+
+/** @param {string} beatId */
+function renderBeat(beatId) {
+  const beat = beats[beatId];
+  if (!beat) {
+    console.error("Unknown beat:", beatId);
+    return;
+  }
+
+  setLoopPhase(state.loopStep % 4);
+
+  document.getElementById("scene-meta").textContent = `Beat · ${beat.id}`;
+  document.getElementById("scene-title").textContent = beat.title;
+
+  const bodyEl = document.getElementById("scene-body");
+  bodyEl.innerHTML = beat.body
+    .map((p) => `<p>${p.replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")}</p>`)
+    .join("");
+
+  const choicesEl = document.getElementById("choices");
+  choicesEl.innerHTML = "";
+  beat.choices.forEach((c) => {
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "choice-btn";
+    btn.textContent = c.label;
+    btn.addEventListener("click", () => {
+      if (c.next === "start") {
+        state.quality = INITIAL_QUALITY;
+        state.loopStep = 0;
+      } else {
+        state.quality += c.qualityDelta;
+        state.loopStep += 1;
+      }
+      showChoiceQualityNote(c);
+      renderQuality(state.quality);
+      renderBeat(c.next);
+    });
+    choicesEl.appendChild(btn);
+  });
+}
+
+const state = {
+  quality: INITIAL_QUALITY,
+  loopStep: 0,
+};
+
+const introScreen = document.getElementById("intro-screen");
+const gameRoot = document.getElementById("game-root");
+const introStartBtn = document.getElementById("intro-start");
+
+introStartBtn.addEventListener("click", () => {
+  introScreen.hidden = true;
+  gameRoot.hidden = false;
+  clearChoiceQualityNote();
+  renderQuality(state.quality);
+  renderBeat("start");
+  document.getElementById("choices")?.querySelector("button")?.focus();
+});
+</script>
+  </body>
+</html>

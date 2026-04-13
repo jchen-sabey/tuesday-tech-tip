@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Prompt Orchestrator — Quality Loop</title>
+    <link rel="stylesheet" href="css/styles.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,600;0,9..40,700;1,9..40,400&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div class="app">
+      <header class="header">
+        <h1>Prompt Orchestrator</h1>
+      </header>
+
+      <section id="intro-screen" class="intro" aria-labelledby="intro-heading">
+        <div class="intro__card">
+          <h2 id="intro-heading" class="intro__title">The orchestrator loop</h2>
+          <div class="intro__body">
+            <p>
+              Using an assistant is not one-and-done. You are driving: ask, wait, read what you got, then
+              choose what happens next. That round trip is the <strong>orchestrator loop</strong>.
+            </p>
+            <ol class="intro__steps">
+              <li><strong>Prompt</strong> — You say what you want (and what you will not accept).</li>
+              <li><strong>Run</strong> — The tool does its thing in the background.</li>
+              <li><strong>Result</strong> — Something lands in front of you. Skim at your peril.</li>
+              <li><strong>Decide</strong> — Ship it, fix it, or try again — and you are back at step one.</li>
+            </ol>
+            <p>
+              In the story below, <strong>quality</strong> is your scoreboard: clear briefs, checks, and
+              patient iteration push it up; vague asks and skipped reads drag it down. No report card — just
+              a live read on where your habits land.
+            </p>
+          </div>
+          <button type="button" class="intro__cta" id="intro-start">Let's play</button>
+        </div>
+      </section>
+
+      <div id="game-root" class="game-root" hidden>
+        <p class="tagline">
+          Same loop as before: <strong>prompt → run → result → decide</strong>. Each pick nudges quality.
+        </p>
+
+        <section class="loop-panel" aria-label="Orchestrator loop">
+          <div class="loop-step is-active" data-step="prompt">
+            <span class="loop-step__label">Prompt</span>
+          </div>
+          <span class="loop-arrow" aria-hidden="true">→</span>
+          <div class="loop-step" data-step="run">
+            <span class="loop-step__label">Run</span>
+          </div>
+          <span class="loop-arrow" aria-hidden="true">→</span>
+          <div class="loop-step" data-step="result">
+            <span class="loop-step__label">Result</span>
+          </div>
+          <span class="loop-arrow" aria-hidden="true">→</span>
+          <div class="loop-step" data-step="decide">
+            <span class="loop-step__label">Decide</span>
+          </div>
+        </section>
+
+        <section class="quality" aria-live="polite">
+          <div class="quality__header">
+            <span class="quality__title">Quality</span>
+            <span class="quality__value quality__value--mid" id="quality-value">50</span>
+          </div>
+          <div
+            class="quality__bar"
+            role="progressbar"
+            aria-valuemin="0"
+            aria-valuemax="100"
+            aria-valuenow="50"
+            id="quality-bar-wrap"
+          >
+            <div class="quality__fill quality__fill--mid" id="quality-fill"></div>
+          </div>
+          <p class="quality__delta" id="quality-delta" hidden aria-live="polite"></p>
+          <p class="quality__hint" id="quality-hint">
+            Stable — You are treading water: fine for now, room to improve.
+          </p>
+        </section>
+
+        <main class="scene" id="scene">
+          <p class="scene__meta" id="scene-meta"></p>
+          <h2 class="scene__title" id="scene-title"></h2>
+          <div class="scene__body" id="scene-body"></div>
+          <div class="choices" id="choices"></div>
+        </main>
+      </div>
+    </div>
+
+    <script type="module" src="js/game.js"></script>
+  </body>
+</html>
