@@ -19,7 +19,7 @@ export const beats = {
     title: "The blank screen",
     body: [
       "Someone is waiting on a message from you: clear, accurate, and on point. Email, portal, letter - whatever the channel, **mistakes mean extra rounds, lost time, and harder trust to earn back**.",
-      "You reach for an assistant to draft. First beat of the **orchestrator loop**: what you ask for, what comes back, and what you do before anything goes out the door.",
+      "You reach for an assistant to draft. First beat of the **feedback loop**: what you ask for, what comes back, and what you do before anything goes out the door.",
     ],
     choices: [
       {
@@ -161,8 +161,8 @@ export const beats = {
     id: "end_regret",
     title: "Ending: the cleanup",
     body: [
-      "Your calendar fills with clarifications, corrections, and re-sent details - work you would not have needed if the first message had been tight. Each back-and-forth chips away at how credible the next thing you send sounds.",
-      "Worth another run: small changes earlier in the loop usually cost less than repair work later.",
+      "Now the extra work starts: follow-ups, corrections, and another round of explaining what you meant.",
+      "A tighter first pass would have saved time and made the next message easier to trust.",
     ],
     choices: [
       {
@@ -178,7 +178,8 @@ export const beats = {
     id: "end_burnout",
     title: "Ending: you carried it all",
     body: [
-      "The message went out, but this time you did not get much lift from the loop - same outcome, more solo effort. Next time, a lighter touch on prompting might save you hours.",
+      "The message got out, but you did most of the work yourself.",
+      "Sometimes that is the right call. But next time, a clearer prompt and one good revision could save you a lot of effort.",
     ],
     choices: [
       {
@@ -194,7 +195,7 @@ export const beats = {
     id: "end_rushed",
     title: "Ending: probably fine",
     body: [
-      "No urgent fires - today. You still skipped a proper **decide** pass, so you shipped text you did not fully re-read. That is free risk on the table for next time.",
+      "Nothing blew up today. But you still skipped a real final read, which means you sent words you had not fully checked.",
     ],
     choices: [
       {
@@ -210,7 +211,8 @@ export const beats = {
     id: "end_transparent",
     title: "Ending: trust intact",
     body: [
-      "They know which parts you stand behind and how you checked them. That clarity saves time on both sides and makes the next exchange easier to trust.",
+      "You were clear about what you checked and what you stand behind.",
+      "That kind of clarity saves time and makes the next exchange easier for everyone.",
     ],
     choices: [
       {
@@ -226,7 +228,8 @@ export const beats = {
     id: "end_sustainable",
     title: "Ending: a habit, not a one-off",
     body: [
-      "You have a reusable brief, a quick checklist before you hit send, and a habit of small iterations. That is orchestration - and you can drop the same pattern into the next message that actually matters.",
+      "Now you have something you can reuse: a solid brief, a quick final check, and a better way to iterate.",
+      "That makes the next important message faster, easier, and less risky.",
     ],
     choices: [
       {
