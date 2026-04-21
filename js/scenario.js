@@ -41,7 +41,7 @@ export const beats = {
           'Skip the body for now; ask for "10 opening lines" just to get something on the screen.',
         qualityDelta: 3,
         next: "subject_first",
-        deltaWhy: "A small, scoped run is okay - as long as you plan to anchor the real message next.",
+        deltaWhy: "A small, scoped pass is okay - as long as you plan to anchor the real message next.",
       },
     ],
   },
@@ -64,7 +64,7 @@ export const beats = {
         label: "Stop. Re-prompt: list the non-negotiable facts and forbid anything not grounded in what you provided.",
         qualityDelta: 8,
         next: "verify_pass",
-        deltaWhy: "You used Evaluate to tighten the prompt around facts you control - risk drops fast.",
+        deltaWhy: "You used Analyze to spot the factual risks, then tightened the prompt around facts you control.",
       },
       {
         label: "Throw the draft away and write the whole message alone, without using the loop again.",
@@ -103,7 +103,7 @@ export const beats = {
     title: "Strong openings, shaky spine",
     body: [
       'You get memorable first lines - but there is still no full message. Along the way, the assistant invented "helpful" details that were never true.',
-      "Even a quick **run** needs a target: every step should tie back to what you actually need to say.",
+      "Even a quick pass needs a target: every step should tie back to what you actually need to say.",
     ],
     choices: [
       {
@@ -111,7 +111,7 @@ export const beats = {
           "Pick a direction, then run a second prompt that only allows the points you already approved.",
         qualityDelta: 7,
         next: "clear_brief",
-        deltaWhy: "You locked the spine before expanding - the next prompt has real guardrails.",
+        deltaWhy: "You locked in the main points before expanding - the next prompt has real guardrails.",
       },
       {
         label: "Choose an opening and ask for the full message in one go, without locking your main points.",
@@ -127,7 +127,7 @@ export const beats = {
     title: "Verification round",
     body: [
       'You add: "Flag anything uncertain; do not add facts I did not give." The assistant labels one line as guessed - you cut it and swap in a line you would sign your name to.',
-      "**Quality** climbs when you use the **Evaluate** step to verify the output against reality - not to stop because it merely sounds good.",
+      "**Quality** climbs when you use the **Make Changes** step to revise the draft against reality - not to stop because it merely sounds good.",
     ],
     choices: [
       {
@@ -152,7 +152,7 @@ export const beats = {
     title: "Tight iteration",
     body: [
       "The second version reads better. The facts are untouched. You spend a few minutes instead of an hour rewriting from zero.",
-      "That is the loop doing its job: **prompt -> run -> result -> decide** (repeat), in small, low-risk hops.",
+      "That is the loop doing its job: **prompt -> analyze -> make changes -> evaluate** (repeat), in small, low-risk hops.",
     ],
     choices: [
       {
