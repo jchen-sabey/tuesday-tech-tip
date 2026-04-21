@@ -108,6 +108,15 @@ body {
   color: color-mix(in srgb, var(--midnight) 78%, var(--marine) 22%);
 }
 
+.section-label {
+  margin: 0 0 0.35rem;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+}
+
 .intro__card {
   padding: 1.35rem 1.25rem 1.5rem;
   background: var(--surface);
@@ -377,6 +386,11 @@ body {
   margin-bottom: 0;
 }
 
+.choices__label {
+  margin-top: 0;
+  margin-bottom: 0.55rem;
+}
+
 .choices {
   display: flex;
   flex-direction: column;
@@ -426,6 +440,7 @@ body {
 
       <section id="intro-screen" class="intro" aria-labelledby="intro-heading">
         <div class="intro__card">
+          <p class="section-label">Instruction</p>
           <h2 id="intro-heading" class="intro__title">The feedback loop</h2>
           <div class="intro__body">
             <p>
@@ -493,10 +508,12 @@ body {
           </p>
         </section>
 
+        <p class="section-label">Scenario</p>
         <main class="scene" id="scene">
           <p class="scene__meta" id="scene-meta"></p>
           <h2 class="scene__title" id="scene-title"></h2>
           <div class="scene__body" id="scene-body"></div>
+          <p class="section-label choices__label" id="choices-label">Pick one</p>
           <div class="choices" id="choices"></div>
         </main>
       </div>
@@ -890,6 +907,11 @@ function renderBeat(beatId) {
   bodyEl.innerHTML = beat.body
     .map((p) => `<p>${p.replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")}</p>`)
     .join("");
+
+  const choicesLabelEl = document.getElementById("choices-label");
+  if (choicesLabelEl) {
+    choicesLabelEl.hidden = beat.choices.length < 2;
+  }
 
   const choicesEl = document.getElementById("choices");
   choicesEl.innerHTML = "";

@@ -101,6 +101,15 @@ body {
   color: color-mix(in srgb, var(--midnight) 78%, var(--marine) 22%);
 }
 
+.section-label {
+  margin: 0 0 0.35rem;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+}
+
 .intro__card {
   padding: 1.35rem 1.25rem 1.5rem;
   background: var(--surface);
@@ -368,6 +377,11 @@ body {
 
 .scene__body p:last-child {
   margin-bottom: 0;
+}
+
+.choices__label {
+  margin-top: 0;
+  margin-bottom: 0.55rem;
 }
 
 .choices {

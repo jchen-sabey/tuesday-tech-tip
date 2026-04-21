@@ -119,6 +119,11 @@ function renderBeat(beatId) {
     .map((p) => `<p>${p.replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")}</p>`)
     .join("");
 
+  const choicesLabelEl = document.getElementById("choices-label");
+  if (choicesLabelEl) {
+    choicesLabelEl.hidden = beat.choices.length < 2;
+  }
+
   const choicesEl = document.getElementById("choices");
   choicesEl.innerHTML = "";
   beat.choices.forEach((c) => {
