@@ -3,6 +3,16 @@ import { beats } from "./scenario.js";
 const INITIAL_QUALITY = 50;
 const QUALITY_MIN = 0;
 const QUALITY_MAX = 100;
+const LOOP_STEPS = ["Prompt", "Analyze", "Make Changes", "Evaluate"];
+
+for (const beat of Object.values(beats)) {
+  const choices = Array.isArray(beat.choices) ? beat.choices : [];
+  const isPlayAgainEnding =
+    choices.length === 1 && typeof choices[0]?.label === "string" && choices[0].label.trim() === "Play again";
+  if (choices.length < 2 && !isPlayAgainEnding) {
+    console.error(`Beat "${beat.id}" must define at least 2 choices unless it is a Play again ending.`);
+  }
+}
 
 /** @param {number} w */
 function qualityBand(w) {
@@ -98,9 +108,10 @@ function renderBeat(beatId) {
     return;
   }
 
-  setLoopPhase(state.loopStep % 4);
+  const phaseIndex = state.loopStep % 4;
+  setLoopPhase(phaseIndex);
 
-  document.getElementById("scene-meta").textContent = `Beat · ${beat.id}`;
+  document.getElementById("scene-meta").textContent = `Loop: ${LOOP_STEPS[phaseIndex]}`;
   document.getElementById("scene-title").textContent = beat.title;
 
   const bodyEl = document.getElementById("scene-body");

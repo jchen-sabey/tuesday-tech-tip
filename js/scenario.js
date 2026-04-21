@@ -64,7 +64,7 @@ export const beats = {
         label: "Stop. Re-prompt: list the non-negotiable facts and forbid anything not grounded in what you provided.",
         qualityDelta: 8,
         next: "verify_pass",
-        deltaWhy: "You used Decide to tighten the prompt around facts you control - risk drops fast.",
+        deltaWhy: "You used Evaluate to tighten the prompt around facts you control - risk drops fast.",
       },
       {
         label: "Throw the draft away and write the whole message alone, without using the loop again.",
@@ -127,7 +127,7 @@ export const beats = {
     title: "Verification round",
     body: [
       'You add: "Flag anything uncertain; do not add facts I did not give." The assistant labels one line as guessed - you cut it and swap in a line you would sign your name to.',
-      "**Quality** climbs when you use the **Decide** step to verify the output against reality - not to stop because it merely sounds good.",
+      "**Quality** climbs when you use the **Evaluate** step to verify the output against reality - not to stop because it merely sounds good.",
     ],
     choices: [
       {
@@ -136,6 +136,13 @@ export const beats = {
         qualityDelta: 12,
         next: "end_transparent",
         deltaWhy: "Clear attribution plus checked facts saves everyone time and protects trust.",
+      },
+      {
+        label:
+          "Do one more pass for tone and precision, then keep the verified facts locked while you tighten the wording.",
+        qualityDelta: 9,
+        next: "iterate_well",
+        deltaWhy: "A final constrained polish keeps the facts grounded while improving how the message lands.",
       },
     ],
   },
@@ -153,6 +160,12 @@ export const beats = {
         qualityDelta: 20,
         next: "end_sustainable",
         deltaWhy: "Turning today's brief into a template makes the next loop faster and safer.",
+      },
+      {
+        label: "Send this checked version now and keep your notes for next time.",
+        qualityDelta: 10,
+        next: "end_ready",
+        deltaWhy: "You ship a verified draft without overworking it, then carry forward what you learned.",
       },
     ],
   },
@@ -213,6 +226,23 @@ export const beats = {
     body: [
       "You were clear about what you checked and what you stand behind.",
       "That kind of clarity saves time and makes the next exchange easier for everyone.",
+    ],
+    choices: [
+      {
+        label: "Play again",
+        qualityDelta: 0,
+        next: "start",
+        deltaWhy: "Quality reset to 50 - try another path through the story.",
+      },
+    ],
+  },
+
+  end_ready: {
+    id: "end_ready",
+    title: "Ending: checked and sent",
+    body: [
+      "The message goes out clean, accurate, and in your voice.",
+      "You did enough verification to trust it, then stopped before polishing turned into delay.",
     ],
     choices: [
       {

@@ -339,7 +339,7 @@ body {
 }
 
 .scene {
-  padding: 1.25rem 1.15rem;
+  padding: 1.25rem 1rem;
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius);
@@ -434,9 +434,9 @@ body {
             </p>
             <ol class="intro__steps">
               <li><strong>Prompt</strong> &mdash; You say what you want (and what you will not accept).</li>
-              <li><strong>Run</strong> &mdash; The tool does its thing in the background.</li>
-              <li><strong>Result</strong> &mdash; Something lands in front of you. Skim at your peril.</li>
-              <li><strong>Decide</strong> &mdash; Ship it, fix it, or try again &mdash; and you are back at step one.</li>
+              <li><strong>Analyze</strong> &mdash; Take in what is there and figure out what matters.</li>
+              <li><strong>Make Changes</strong> &mdash; Revise, refine, or redirect based on what you found.</li>
+              <li><strong>Evaluate</strong> &mdash; Judge whether it is ready, needs another pass, or should change course.</li>
             </ol>
             <p>
               In the story below, <strong>quality</strong> is your scoreboard: clear briefs, checks, and
@@ -450,7 +450,7 @@ body {
 
       <div id="game-root" class="game-root" hidden>
         <p class="tagline">
-          Same loop as before: <strong>prompt &rarr; run &rarr; result &rarr; decide</strong>. Each pick nudges
+          Read each scene, then pick the option you think leads to the strongest outcome. Each choice nudges
           quality.
         </p>
 
@@ -459,16 +459,16 @@ body {
             <span class="loop-step__label">Prompt</span>
           </div>
           <span class="loop-arrow" aria-hidden="true">&rarr;</span>
-          <div class="loop-step" data-step="run">
-            <span class="loop-step__label">Run</span>
+          <div class="loop-step" data-step="analyze">
+            <span class="loop-step__label">Analyze</span>
           </div>
           <span class="loop-arrow" aria-hidden="true">&rarr;</span>
-          <div class="loop-step" data-step="result">
-            <span class="loop-step__label">Result</span>
+          <div class="loop-step" data-step="make-changes">
+            <span class="loop-step__label">Make Changes</span>
           </div>
           <span class="loop-arrow" aria-hidden="true">&rarr;</span>
-          <div class="loop-step" data-step="decide">
-            <span class="loop-step__label">Decide</span>
+          <div class="loop-step" data-step="evaluate">
+            <span class="loop-step__label">Evaluate</span>
           </div>
         </section>
 
@@ -564,7 +564,7 @@ const beats = {
         label: "Stop. Re-prompt: list the non-negotiable facts and forbid anything not grounded in what you provided.",
         qualityDelta: 8,
         next: "verify_pass",
-        deltaWhy: "You used Decide to tighten the prompt around facts you control - risk drops fast.",
+        deltaWhy: "You used Evaluate to tighten the prompt around facts you control - risk drops fast.",
       },
       {
         label: "Throw the draft away and write the whole message alone, without using the loop again.",
@@ -627,7 +627,7 @@ const beats = {
     title: "Verification round",
     body: [
       'You add: "Flag anything uncertain; do not add facts I did not give." The assistant labels one line as guessed - you cut it and swap in a line you would sign your name to.',
-      "**Quality** climbs when you use the **Decide** step to verify the output against reality - not to stop because it merely sounds good.",
+      "**Quality** climbs when you use the **Evaluate** step to verify the output against reality - not to stop because it merely sounds good.",
     ],
     choices: [
       {
@@ -636,6 +636,13 @@ const beats = {
         qualityDelta: 12,
         next: "end_transparent",
         deltaWhy: "Clear attribution plus checked facts saves everyone time and protects trust.",
+      },
+      {
+        label:
+          "Do one more pass for tone and precision, then keep the verified facts locked while you tighten the wording.",
+        qualityDelta: 9,
+        next: "iterate_well",
+        deltaWhy: "A final constrained polish keeps the facts grounded while improving how the message lands.",
       },
     ],
   },
@@ -653,6 +660,12 @@ const beats = {
         qualityDelta: 20,
         next: "end_sustainable",
         deltaWhy: "Turning today's brief into a template makes the next loop faster and safer.",
+      },
+      {
+        label: "Send this checked version now and keep your notes for next time.",
+        qualityDelta: 10,
+        next: "end_ready",
+        deltaWhy: "You ship a verified draft without overworking it, then carry forward what you learned.",
       },
     ],
   },
@@ -724,6 +737,23 @@ const beats = {
     ],
   },
 
+  end_ready: {
+    id: "end_ready",
+    title: "Ending: checked and sent",
+    body: [
+      "The message goes out clean, accurate, and in your voice.",
+      "You did enough verification to trust it, then stopped before polishing turned into delay.",
+    ],
+    choices: [
+      {
+        label: "Play again",
+        qualityDelta: 0,
+        next: "start",
+        deltaWhy: "Quality reset to 50 - try another path through the story.",
+      },
+    ],
+  },
+
   end_sustainable: {
     id: "end_sustainable",
     title: "Ending: a habit, not a one-off",
@@ -745,6 +775,16 @@ const beats = {
 const INITIAL_QUALITY = 50;
 const QUALITY_MIN = 0;
 const QUALITY_MAX = 100;
+const LOOP_STEPS = ["Prompt", "Analyze", "Make Changes", "Evaluate"];
+
+for (const beat of Object.values(beats)) {
+  const choices = Array.isArray(beat.choices) ? beat.choices : [];
+  const isPlayAgainEnding =
+    choices.length === 1 && typeof choices[0]?.label === "string" && choices[0].label.trim() === "Play again";
+  if (choices.length < 2 && !isPlayAgainEnding) {
+    console.error(`Beat "${beat.id}" must define at least 2 choices unless it is a Play again ending.`);
+  }
+}
 
 /** @param {number} w */
 function qualityBand(w) {
@@ -840,9 +880,10 @@ function renderBeat(beatId) {
     return;
   }
 
-  setLoopPhase(state.loopStep % 4);
+  const phaseIndex = state.loopStep % 4;
+  setLoopPhase(phaseIndex);
 
-  document.getElementById("scene-meta").textContent = `Beat · ${beat.id}`;
+  document.getElementById("scene-meta").textContent = `Loop: ${LOOP_STEPS[phaseIndex]}`;
   document.getElementById("scene-title").textContent = beat.title;
 
   const bodyEl = document.getElementById("scene-body");
