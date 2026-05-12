@@ -1,104 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Prompt Orchestrator &mdash; Quality Loop</title>
-    <link rel="stylesheet" href="css/styles.css" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,600;0,9..40,700;1,9..40,400&family=JetBrains+Mono:wght@400;500&display=swap"
-      rel="stylesheet"
-    />
-  </head>
-  <body>
-    <div class="app">
-      <header class="header">
-        <h1>Prompt Orchestrator</h1>
-      </header>
-
-      <section id="intro-screen" class="intro" aria-labelledby="intro-heading">
-        <div class="intro__card">
-          <p class="section-label">Instruction</p>
-          <h2 id="intro-heading" class="intro__title">The feedback loop</h2>
-          <div class="intro__body">
-            <p>
-              Using an assistant is not one-and-done. You are driving: ask, wait, read what you got, then
-              choose what happens next. That round trip is the <strong>feedback loop</strong>.
-            </p>
-            <ol class="intro__steps">
-              <li><strong>Prompt</strong> &mdash; You say what you want (and what you will not accept).</li>
-              <li><strong>Analyze</strong> &mdash; Take in what is there and figure out what matters.</li>
-              <li><strong>Make Changes</strong> &mdash; Revise, refine, or redirect based on what you found.</li>
-              <li><strong>Evaluate</strong> &mdash; Judge whether it is ready, needs another pass, or should change course.</li>
-            </ol>
-            <p>
-              In the story below, <strong>quality</strong> is your scoreboard: clear briefs, checks, and
-              patient iteration push it up; vague asks and skipped reads drag it down. No report card &mdash;
-              just a live read on where your habits land.
-            </p>
-          </div>
-          <button type="button" class="intro__cta" id="intro-start">Let's play</button>
-        </div>
-      </section>
-
-      <div id="game-root" class="game-root" hidden>
-        <p class="tagline">
-          Read each scene, then pick the option you think leads to the strongest outcome. Each choice nudges
-          quality.
-        </p>
-
-        <section class="loop-panel" aria-label="Feedback loop">
-          <div class="loop-step is-active" data-step="prompt">
-            <span class="loop-step__label">Prompt</span>
-          </div>
-          <span class="loop-arrow" aria-hidden="true">&rarr;</span>
-          <div class="loop-step" data-step="analyze">
-            <span class="loop-step__label">Analyze</span>
-          </div>
-          <span class="loop-arrow" aria-hidden="true">&rarr;</span>
-          <div class="loop-step" data-step="make-changes">
-            <span class="loop-step__label">Make Changes</span>
-          </div>
-          <span class="loop-arrow" aria-hidden="true">&rarr;</span>
-          <div class="loop-step" data-step="evaluate">
-            <span class="loop-step__label">Evaluate</span>
-          </div>
-        </section>
-
-        <section class="quality" aria-live="polite">
-          <div class="quality__header">
-            <span class="quality__title">Quality</span>
-            <span class="quality__value quality__value--mid" id="quality-value">50</span>
-          </div>
-          <div
-            class="quality__bar"
-            role="progressbar"
-            aria-valuemin="0"
-            aria-valuemax="100"
-            aria-valuenow="50"
-            id="quality-bar-wrap"
-          >
-            <div class="quality__fill quality__fill--mid" id="quality-fill"></div>
-          </div>
-          <p class="quality__delta" id="quality-delta" hidden aria-live="polite"></p>
-          <p class="quality__hint" id="quality-hint">
-            Stable &mdash; You are treading water: fine for now, room to improve.
-          </p>
-        </section>
-
-        <p class="section-label">Scenario</p>
-        <main class="scene" id="scene">
-          <p class="scene__meta" id="scene-meta"></p>
-          <h2 class="scene__title" id="scene-title"></h2>
-          <div class="scene__body" id="scene-body"></div>
-          <p class="section-label choices__label" id="choices-label">Pick one</p>
-          <div class="choices" id="choices"></div>
-        </main>
-      </div>
-    </div>
-
-    <script type="module" src="js/game.js"></script>
-  </body>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="refresh" content="0; url=tuesday_tech_tip_interactive_report_game.html" />
+  <title>Tuesday Tech Tip: Interactive KPI Report Demo</title>
+</head>
+<body>
+  <p>
+    Opening the interactive KPI report demo.
+    <a href="tuesday_tech_tip_interactive_report_game.html">Open it here</a>.
+  </p>
+</body>
 </html>
