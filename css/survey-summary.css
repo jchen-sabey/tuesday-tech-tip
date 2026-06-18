@@ -5,12 +5,12 @@
   --white: #ffffff;
   --muted: rgba(255, 255, 255, 0.74);
   --line: rgba(255, 255, 255, 0.22);
-  --acid: #d7e88f;
-  --cyan: #8ed5cf;
-  --pink: #a94762;
-  --orange: #c88745;
-  --violet: #514b98;
-  --blue: #27549a;
+  --acid: #c8e85f;
+  --cyan: #45cfc1;
+  --pink: #bf3f66;
+  --orange: #d88b2f;
+  --violet: #5b4fc2;
+  --blue: #245fbe;
   --shadow: 0 20px 48px rgba(0, 0, 0, 0.28);
 }
 
@@ -329,7 +329,7 @@ h1 {
 
 .story-card--ink {
   background:
-    linear-gradient(135deg, rgba(215, 232, 143, 0.13), transparent 34%),
+    linear-gradient(135deg, rgba(200, 232, 95, 0.15), transparent 34%),
     #080914;
   color: var(--white);
 }
