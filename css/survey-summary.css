@@ -302,36 +302,72 @@ h1 {
   transform: rotate(-9deg);
 }
 
+.story-card::after {
+  position: absolute;
+  inset: 32px auto auto -52px;
+  width: 210px;
+  height: 210px;
+  border: 18px solid currentColor;
+  clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%);
+  content: "";
+  opacity: 0.08;
+  pointer-events: none;
+  transform: rotate(16deg);
+}
+
 .story-card--hot {
-  background: var(--pink);
+  background:
+    linear-gradient(135deg, rgba(8, 9, 20, 0.1) 0 18%, transparent 18%),
+    var(--pink);
   color: var(--white);
 }
 
 .story-card--cool {
-  background: var(--cyan);
+  background:
+    linear-gradient(90deg, rgba(8, 9, 20, 0.08) 0 16%, transparent 16%),
+    var(--cyan);
   color: var(--ink);
 }
 
 .story-card--acid {
-  background: var(--acid);
+  background:
+    linear-gradient(145deg, rgba(8, 9, 20, 0.08) 0 22%, transparent 22%),
+    var(--acid);
   color: var(--ink);
 }
 
 .story-card--violet {
-  background: var(--violet);
+  background:
+    linear-gradient(160deg, rgba(8, 9, 20, 0.1) 0 20%, transparent 20%),
+    var(--violet);
   color: var(--white);
 }
 
 .story-card--blue {
-  background: var(--blue);
+  background:
+    linear-gradient(20deg, rgba(8, 9, 20, 0.1) 0 18%, transparent 18%),
+    var(--blue);
   color: var(--white);
 }
 
 .story-card--ink {
   background:
+    repeating-linear-gradient(135deg, rgba(255, 255, 255, 0.04) 0 2px, transparent 2px 22px),
     linear-gradient(135deg, rgba(214, 255, 53, 0.18), transparent 34%),
     #080914;
   color: var(--white);
+}
+
+.story-card--cool::after,
+.story-card--acid::after {
+  opacity: 0.1;
+}
+
+.story-card--violet::after,
+.story-card--blue::after,
+.story-card--ink::after {
+  inset: 28px -54px auto auto;
+  transform: rotate(30deg);
 }
 
 .story-kicker {
@@ -626,6 +662,12 @@ h1 {
     width: 160px;
     height: 160px;
     border-width: 15px;
+  }
+
+  .story-card::after {
+    width: 138px;
+    height: 138px;
+    border-width: 12px;
   }
 
   .source-panel {
