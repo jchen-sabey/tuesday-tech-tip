@@ -10,10 +10,17 @@
   const selectors = {
     stats: document.getElementById("metric-grid"),
     deck: document.getElementById("story-deck"),
+    previous: document.getElementById("slide-prev"),
+    next: document.getElementById("slide-next"),
+    slideCount: document.getElementById("slide-count"),
+    slideDots: document.getElementById("slide-dots"),
     sourceCount: document.getElementById("source-response-count"),
     sourceName: document.getElementById("source-name"),
     sourceDate: document.getElementById("source-date"),
   };
+
+  let currentSlide = 0;
+  let slideTotal = 0;
 
   function escapeHtml(value) {
     return String(value)
@@ -339,7 +346,7 @@
   }
 
   function renderDeck(responses) {
-    selectors.deck.innerHTML = [
+    const slides = [
       renderTopWishCard(responses),
       renderSpeedBumpCard(responses),
       renderLevelUpCard(responses),
@@ -349,7 +356,62 @@
       renderToolsCard(responses),
       renderThemesCard(),
       renderFinalCard(responses),
-    ].join("");
+    ];
+
+    selectors.deck.innerHTML = slides
+      .map((slide, index) =>
+        slide.replace(/<article class="([^"]+)"/, `<article class="$1" data-slide="${index}" tabindex="-1"`)
+      )
+      .join("");
+    slideTotal = slides.length;
+    currentSlide = Math.min(currentSlide, slideTotal - 1);
+    renderSlideDots();
+    updateSlide();
+  }
+
+  function getSlideCards() {
+    return Array.from(selectors.deck.querySelectorAll(".story-card"));
+  }
+
+  function renderSlideDots() {
+    selectors.slideDots.innerHTML = Array.from({ length: slideTotal }, (_, index) => {
+      return `<button class="slide-dot" type="button" data-slide-target="${index}" aria-label="Go to result ${index + 1}"></button>`;
+    }).join("");
+
+    selectors.slideDots.querySelectorAll(".slide-dot").forEach((dot) => {
+      dot.addEventListener("click", () => {
+        goToSlide(Number(dot.dataset.slideTarget), true);
+      });
+    });
+  }
+
+  function updateSlide(shouldFocus = false) {
+    const cards = getSlideCards();
+
+    cards.forEach((card, index) => {
+      const isActive = index === currentSlide;
+      card.hidden = !isActive;
+      card.setAttribute("aria-hidden", String(!isActive));
+    });
+
+    selectors.previous.disabled = currentSlide === 0;
+    selectors.next.disabled = currentSlide === slideTotal - 1;
+    selectors.slideCount.textContent = `Result ${currentSlide + 1} of ${slideTotal}`;
+
+    selectors.slideDots.querySelectorAll(".slide-dot").forEach((dot, index) => {
+      dot.classList.toggle("is-active", index === currentSlide);
+      dot.setAttribute("aria-current", index === currentSlide ? "step" : "false");
+    });
+
+    if (shouldFocus && cards[currentSlide]) {
+      cards[currentSlide].focus({ preventScroll: true });
+      selectors.deck.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  }
+
+  function goToSlide(index, shouldFocus = false) {
+    currentSlide = Math.max(0, Math.min(index, slideTotal - 1));
+    updateSlide(shouldFocus);
   }
 
   function render() {
@@ -363,6 +425,24 @@
     selectors.sourceName.textContent = data.sourceName;
     selectors.sourceName.title = data.sourceName;
     selectors.sourceDate.textContent = data.generatedOn;
+
+    selectors.previous.addEventListener("click", () => goToSlide(currentSlide - 1, true));
+    selectors.next.addEventListener("click", () => goToSlide(currentSlide + 1, true));
+    document.addEventListener("keydown", (event) => {
+      if (event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) {
+        return;
+      }
+
+      if (event.key === "ArrowLeft") {
+        event.preventDefault();
+        goToSlide(currentSlide - 1, true);
+      }
+
+      if (event.key === "ArrowRight") {
+        event.preventDefault();
+        goToSlide(currentSlide + 1, true);
+      }
+    });
 
     render();
   }

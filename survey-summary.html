@@ -17,7 +17,7 @@
             connected to the work people actually do.
           </p>
           <div class="hero-actions">
-            <a class="primary-link" href="#story-deck">Start the recap</a>
+            <a class="primary-link" href="#story-deck">Start the summary</a>
           </div>
         </div>
 
@@ -39,7 +39,17 @@
 
       <main>
         <section class="opening-stats" id="metric-grid" aria-label="Key survey highlights"></section>
-        <section class="story-deck" id="story-deck" aria-live="polite"></section>
+        <section class="summary-slides" aria-label="Survey summary slides">
+          <section class="story-deck" id="story-deck" aria-live="polite"></section>
+          <nav class="slide-controls" aria-label="Summary slide navigation">
+            <button class="slide-button" type="button" id="slide-prev">Back</button>
+            <div class="slide-status">
+              <span id="slide-count">Slide 1 of 1</span>
+              <div class="slide-dots" id="slide-dots"></div>
+            </div>
+            <button class="slide-button" type="button" id="slide-next">Next</button>
+          </nav>
+        </section>
       </main>
     </div>
 
