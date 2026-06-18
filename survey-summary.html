@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AI Training Feedback Summary</title>
+    <link rel="stylesheet" href="css/survey-summary.css" />
+  </head>
+  <body>
+    <div class="page-shell">
+      <header class="hero-card" id="top">
+        <div class="hero-copy">
+          <p class="eyebrow">AI Training Feedback</p>
+          <h1>Your feedback was clear.</h1>
+          <p class="lede">
+            Forty-five voices told us what would make AI training more useful, less generic, and more
+            connected to the work people actually do.
+          </p>
+          <div class="hero-actions">
+            <a class="primary-link" href="#story-deck">Start the recap</a>
+          </div>
+        </div>
+
+        <dl class="source-panel" aria-label="Survey source">
+          <div>
+            <dt>Voices heard</dt>
+            <dd id="source-response-count">45</dd>
+          </div>
+          <div>
+            <dt>Workbook</dt>
+            <dd id="source-name">Survey results</dd>
+          </div>
+          <div>
+            <dt>Summary date</dt>
+            <dd id="source-date">2026-06-17</dd>
+          </div>
+        </dl>
+      </header>
+
+      <main>
+        <section class="opening-stats" id="metric-grid" aria-label="Key survey highlights"></section>
+        <section class="story-deck" id="story-deck" aria-live="polite"></section>
+      </main>
+    </div>
+
+    <script src="js/survey-summary-data.js"></script>
+    <script src="js/survey-summary.js"></script>
+  </body>
+</html>
